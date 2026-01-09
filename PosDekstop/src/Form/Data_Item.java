@@ -31,17 +31,18 @@ public class Data_Item extends javax.swing.JFrame {
     private void load_table() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("No");
-        model.addColumn("Nama Item");
+        model.addColumn("Menu");
         model.addColumn("Kategori");
         model.addColumn("Harga");
 
         try {
+            int no = 1;
             java.sql.Connection conn = Conn.configDB();
             java.sql.Statement stm = conn.createStatement();
             java.sql.ResultSet res = stm.executeQuery("SELECT * FROM item");
             while (res.next()) {
                 model.addRow(new Object[]{
-                    res.getString(1), res.getString(2), res.getString(3), res.getString(4)
+                    no++, res.getString(2), res.getString(3), res.getString(4)
                 });
             }
             jTable1.setModel(model);
