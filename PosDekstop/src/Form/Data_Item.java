@@ -26,6 +26,7 @@ public class Data_Item extends javax.swing.JFrame {
     public Data_Item() {
         initComponents();
         load_table();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     private void load_table() {

@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
  * @author JustCoFi
  */
 public class Dashboard extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Dashboard.class.getName());
 
     /**
@@ -184,6 +184,7 @@ public class Dashboard extends javax.swing.JFrame {
         tambahItem.setBackground(new java.awt.Color(51, 204, 0));
         tambahItem.setForeground(new java.awt.Color(255, 255, 255));
         tambahItem.setText("Tambah item");
+        tambahItem.addActionListener(this::tambahItemActionPerformed);
 
         jButton4.setBackground(new java.awt.Color(255, 153, 0));
         jButton4.setForeground(new java.awt.Color(255, 255, 255));
@@ -339,34 +340,34 @@ public class Dashboard extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-    
+
     private void load_table() {
-    DefaultTableModel model = new DefaultTableModel();
-    model.addColumn("No");
-    model.addColumn("Menu");
-    model.addColumn("Kategori");
-    model.addColumn("Harga");
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("No");
+        model.addColumn("Menu");
+        model.addColumn("Kategori");
+        model.addColumn("Harga");
 
-    try {
-        int no = 1;
-        String sql = "SELECT nama_item, kategori, harga FROM item";
-        java.sql.Connection conn = Conn.configDB();
-        java.sql.Statement stm = conn.createStatement();
-        java.sql.ResultSet res = stm.executeQuery(sql);
+        try {
+            int no = 1;
+            String sql = "SELECT nama_item, kategori, harga FROM item";
+            java.sql.Connection conn = Conn.configDB();
+            java.sql.Statement stm = conn.createStatement();
+            java.sql.ResultSet res = stm.executeQuery(sql);
 
-        while (res.next()) {
-            model.addRow(new Object[]{
-                no++, 
-                res.getString("nama_item"),
-                res.getString("kategori"),
-                res.getString("harga")
-            });
+            while (res.next()) {
+                model.addRow(new Object[]{
+                    no++,
+                    res.getString("nama_item"),
+                    res.getString("kategori"),
+                    res.getString("harga")
+                });
+            }
+            tableDashboard.setModel(model);
+        } catch (Exception e) {
+            System.err.println("Gagal Load Dashboard: " + e.getMessage());
         }
-        tableDashboard.setModel(model);
-    } catch (Exception e) {
-        System.err.println("Gagal Load Dashboard: " + e.getMessage());
     }
-}
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
@@ -378,6 +379,11 @@ public class Dashboard extends javax.swing.JFrame {
     private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField5ActionPerformed
+
+    private void tambahItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tambahItemActionPerformed
+        Data_Item tambah = new Data_Item();
+        tambah.setVisible(true);
+    }//GEN-LAST:event_tambahItemActionPerformed
 
     /**
      * @param args the command line arguments
