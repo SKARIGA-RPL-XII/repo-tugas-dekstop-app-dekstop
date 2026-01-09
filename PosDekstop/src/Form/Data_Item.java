@@ -206,9 +206,43 @@ public class Data_Item extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    private void reset_form() {
+        txt_nama.setText("");
+        txt_harga.setText("");
+        txt_kategori.setSelectedIndex(0);
+        txt_nama.requestFocus();
+    }
+    
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
-        // TODO add your handling code here:
+        int baris = jTable1.getSelectedRow();
+
+        if (baris == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih data di tabel terlebih dahulu!");
+            return;
+        }
+
+        String id_item = jTable1.getValueAt(baris, 0).toString();
+        String nama_item = jTable1.getValueAt(baris, 1).toString();
+
+        int jawab = JOptionPane.showConfirmDialog(null, "Hapus item " + nama_item + "?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+
+        if (jawab == JOptionPane.YES_OPTION) {
+            try {
+                java.sql.Connection conn = Conn.configDB();
+                String sql = "DELETE FROM item WHERE No = ?";
+                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setString(1, id_item);
+
+                pst.execute();
+
+                JOptionPane.showMessageDialog(null, "Data berhasil dihapus");
+                load_table();
+                reset_form();
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Gagal menghapus: " + e.getMessage());
+            }
+        }
     }//GEN-LAST:event_btnHapusActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
