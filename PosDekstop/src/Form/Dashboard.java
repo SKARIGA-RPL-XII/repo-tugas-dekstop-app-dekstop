@@ -4,6 +4,9 @@
  */
 package Form;
 
+import Config.Conn;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author JustCoFi
@@ -17,6 +20,7 @@ public class Dashboard extends javax.swing.JFrame {
      */
     public Dashboard() {
         initComponents();
+        load_table();
     }
 
     /**
@@ -35,7 +39,7 @@ public class Dashboard extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableDashboard = new javax.swing.JTable();
         transaksi = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jTextField2 = new javax.swing.JTextField();
@@ -45,7 +49,7 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
+        tambahItem = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
@@ -85,7 +89,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         jLabel1.setText("Cari item");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableDashboard.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -93,10 +97,10 @@ public class Dashboard extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "No", "Nama", "Menu", "Harga"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tableDashboard);
 
         javax.swing.GroupLayout itemLayout = new javax.swing.GroupLayout(item);
         item.setLayout(itemLayout);
@@ -177,9 +181,9 @@ public class Dashboard extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(jTable2);
 
-        jButton3.setBackground(new java.awt.Color(51, 204, 0));
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Tambah item");
+        tambahItem.setBackground(new java.awt.Color(51, 204, 0));
+        tambahItem.setForeground(new java.awt.Color(255, 255, 255));
+        tambahItem.setText("Tambah item");
 
         jButton4.setBackground(new java.awt.Color(255, 153, 0));
         jButton4.setForeground(new java.awt.Color(255, 255, 255));
@@ -199,7 +203,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(tambahItem)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -213,7 +217,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
+                    .addComponent(tambahItem)
                     .addComponent(jButton4)
                     .addComponent(jButton5))
                 .addContainerGap(16, Short.MAX_VALUE))
@@ -335,7 +339,34 @@ public class Dashboard extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+    
+    private void load_table() {
+    DefaultTableModel model = new DefaultTableModel();
+    model.addColumn("No");
+    model.addColumn("Menu");
+    model.addColumn("Kategori");
+    model.addColumn("Harga");
 
+    try {
+        int no = 1;
+        String sql = "SELECT nama_item, kategori, harga FROM item";
+        java.sql.Connection conn = Conn.configDB();
+        java.sql.Statement stm = conn.createStatement();
+        java.sql.ResultSet res = stm.executeQuery(sql);
+
+        while (res.next()) {
+            model.addRow(new Object[]{
+                no++, 
+                res.getString("nama_item"),
+                res.getString("kategori"),
+                res.getString("harga")
+            });
+        }
+        tableDashboard.setModel(model);
+    } catch (Exception e) {
+        System.err.println("Gagal Load Dashboard: " + e.getMessage());
+    }
+}
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
@@ -379,7 +410,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel item;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
@@ -393,7 +423,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
@@ -401,6 +430,8 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
+    private javax.swing.JTable tableDashboard;
+    private javax.swing.JButton tambahItem;
     private javax.swing.JPanel transaksi;
     // End of variables declaration//GEN-END:variables
 }
