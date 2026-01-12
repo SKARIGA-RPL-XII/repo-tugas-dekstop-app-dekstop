@@ -157,13 +157,13 @@ public class Data_Item extends javax.swing.JFrame {
 
         tableDataItem.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Kode Barang", "Menu", "Kategori", "Harga", "Stok"
+                "Kode Barang", "Menu", "Kategori", "Harga"
             }
         ));
         tableDataItem.setAutoscrolls(false);
