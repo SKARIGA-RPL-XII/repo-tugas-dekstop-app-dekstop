@@ -343,7 +343,7 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void load_table() {
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("No");
+        model.addColumn("Kode Barang");
         model.addColumn("Menu");
         model.addColumn("Kategori");
         model.addColumn("Harga");
