@@ -65,6 +65,7 @@ public class Dashboard extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         Background.setBackground(new java.awt.Color(204, 204, 204));
 
