@@ -37,7 +37,7 @@ public class Dashboard extends javax.swing.JFrame {
         Header = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         item = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        txtSearch = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableDashboard = new javax.swing.JTable();
@@ -91,6 +91,12 @@ public class Dashboard extends javax.swing.JFrame {
 
         item.setBackground(new java.awt.Color(255, 255, 255));
 
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchKeyReleased(evt);
+            }
+        });
+
         jLabel1.setText("Cari item");
 
         tableDashboard.setModel(new javax.swing.table.DefaultTableModel(
@@ -125,7 +131,7 @@ public class Dashboard extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, itemLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
                     .addGroup(itemLayout.createSequentialGroup()
@@ -138,7 +144,7 @@ public class Dashboard extends javax.swing.JFrame {
             .addGroup(itemLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(itemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
                     .addComponent(btnRefresh))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -364,11 +370,9 @@ public class Dashboard extends javax.swing.JFrame {
         model.addColumn("Menu");
         model.addColumn("Kategori");
         model.addColumn("Harga");
-        model.addColumn("Stok");
 
         try {
-            int no = 1;
-            String sql = "SELECT nama_item, kategori, harga, stock_barang FROM item";
+            String sql = "SELECT nama_item, kategori, harga FROM item";
             java.sql.Connection conn = Conn.configDB();
             java.sql.Statement stm = conn.createStatement();
             java.sql.ResultSet res = stm.executeQuery(sql);
@@ -377,8 +381,7 @@ public class Dashboard extends javax.swing.JFrame {
                 model.addRow(new Object[]{
                     res.getString("nama_item"),
                     res.getString("kategori"),
-                    res.getString("harga"),
-                    res.getString("stock_barang")
+                    res.getString("harga")
                 });
             }
             tableDashboard.setModel(model);
@@ -411,6 +414,32 @@ public class Dashboard extends javax.swing.JFrame {
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
+        String cari = txtSearch.getText();
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Nama");
+        model.addColumn("Kategori");
+        model.addColumn("Harga");
+
+        try {
+            String sql = "SELECT * FROM item WHERE nama_item LIKE '%" + cari + "%' OR kategori LIKE '%" + cari + "%'";
+            java.sql.Connection conn = Conn.configDB();
+            java.sql.Statement stm = conn.createStatement();
+            java.sql.ResultSet res = stm.executeQuery(sql);
+
+            while (res.next()) {
+                model.addRow(new Object[]{
+                    res.getString("nama_item"),
+                    res.getString("kategori"),
+                    res.getString("harga"),
+                });
+            }
+            tableDashboard.setModel(model);
+        } catch (Exception e) {
+            System.out.println("Error Pencarian: " + e.getMessage());
+        }
+    }//GEN-LAST:event_txtSearchKeyReleased
 
     /**
      * @param args the command line arguments
@@ -458,7 +487,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
@@ -468,5 +496,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JTable tableDashboard;
     private javax.swing.JButton tambahItem;
     private javax.swing.JPanel transaksi;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

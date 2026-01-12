@@ -5,10 +5,6 @@
 package Form;
 
 import Config.Conn;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -35,14 +31,13 @@ public class Data_Item extends javax.swing.JFrame {
         model.addColumn("Menu");
         model.addColumn("Kategori");
         model.addColumn("Harga");
-        model.addColumn("Stok");
         try {
             java.sql.Connection conn = Conn.configDB();
             java.sql.Statement stm = conn.createStatement();
             java.sql.ResultSet res = stm.executeQuery("SELECT * FROM item");
             while (res.next()) {
                 model.addRow(new Object[]{
-                    res.getString(1), res.getString(2), res.getString(3), res.getString(4), res.getString(5)
+                    res.getString(1), res.getString(2), res.getString(3), res.getString(4)
                 });
             }
             tableDataItem.setModel(model);
@@ -72,8 +67,6 @@ public class Data_Item extends javax.swing.JFrame {
         btnHapus = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
         btnSimpan = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        txt_stok = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         txt_nama = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -106,8 +99,6 @@ public class Data_Item extends javax.swing.JFrame {
         btnSimpan.setText("Simpan");
         btnSimpan.addActionListener(this::btnSimpanActionPerformed);
 
-        jLabel5.setText("Stok");
-
         jLabel6.setText("Nama Item");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -122,14 +113,12 @@ public class Data_Item extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addComponent(jLabel4)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel5)
                             .addComponent(jLabel6))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txt_harga, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
                             .addComponent(txt_kodeBarang)
                             .addComponent(txt_kategori, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txt_stok, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
                             .addComponent(txt_nama)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(143, 143, 143)
@@ -159,11 +148,7 @@ public class Data_Item extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txt_harga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txt_stok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnHapus)
                     .addComponent(btnReset)
@@ -235,10 +220,79 @@ public class Data_Item extends javax.swing.JFrame {
         txt_kodeBarang.setText("");
         txt_nama.setText("");
         txt_harga.setText("");
-        txt_stok.setText("");
         txt_kategori.setSelectedIndex(0);
         txt_nama.requestFocus();
     }
+
+    private void tableDataItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableDataItemMouseClicked
+        int baris = tableDataItem.getSelectedRow();
+
+        String kode_barang = tableDataItem.getValueAt(baris, 0).toString();
+        String nama = tableDataItem.getValueAt(baris, 1).toString();
+        String kategori = tableDataItem.getValueAt(baris, 2).toString();
+        String harga = tableDataItem.getValueAt(baris, 3).toString();
+
+        txt_kodeBarang.setText(kode_barang);
+        txt_nama.setText(nama);
+        txt_kategori.setSelectedItem(kategori);
+        txt_harga.setText(harga);
+    }//GEN-LAST:event_tableDataItemMouseClicked
+
+    private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+        String kode = txt_kodeBarang.getText().trim();
+        String nama = txt_nama.getText().trim();
+        String hargaRaw = txt_harga.getText().trim();
+
+        if (nama.equals("") || hargaRaw.equals("")) {
+            JOptionPane.showMessageDialog(this, "Semua kolom wajib diisi!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            int harga = Integer.parseInt(hargaRaw);
+
+            java.sql.Connection conn = Conn.configDB();
+
+            String checkSql = "SELECT COUNT(*) FROM item WHERE kode_barang = ?";
+            java.sql.PreparedStatement checkPst = conn.prepareStatement(checkSql);
+            checkPst.setString(1, kode);
+            java.sql.ResultSet rs = checkPst.executeQuery();
+            rs.next();
+            int count = rs.getInt(1);
+
+            java.sql.PreparedStatement pst;
+            if (count > 0) {
+                String sql = "UPDATE item SET nama_item=?, kategori=?, harga=? WHERE kode_barang=?";
+                pst = conn.prepareStatement(sql);
+                pst.setString(1, nama);
+                pst.setString(2, txt_kategori.getSelectedItem().toString());
+                pst.setInt(3, harga);
+                pst.setString(4, kode);
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Data Berhasil Diperbarui!");
+            } else {
+                String sql = "INSERT INTO item (nama_item, kategori, harga) VALUES (?,?,?)";
+                pst = conn.prepareStatement(sql);
+                pst.setString(1, nama);
+                pst.setString(2, txt_kategori.getSelectedItem().toString());
+                pst.setInt(3, harga);
+                pst.execute();
+                JOptionPane.showMessageDialog(null, "Data Berhasil Disimpan!");
+            }
+
+            load_table();
+            reset_form();
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Harga harus berupa angka!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnSimpanActionPerformed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        reset_form();
+    }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         int baris = tableDataItem.getSelectedRow();
@@ -277,82 +331,6 @@ public class Data_Item extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnHapusActionPerformed
 
-    private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
-        String kode = txt_kodeBarang.getText().trim();
-        String nama = txt_nama.getText().trim();
-        String hargaRaw = txt_harga.getText().trim();
-        String stokRaw = txt_stok.getText().trim();
-
-        if (nama.equals("") || hargaRaw.equals("") || stokRaw.equals("")) {
-            JOptionPane.showMessageDialog(this, "Semua kolom wajib diisi!", "Peringatan", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        try {
-            int harga = Integer.parseInt(hargaRaw);
-            int stok = Integer.parseInt(stokRaw);
-
-            java.sql.Connection conn = Conn.configDB();
-
-            String checkSql = "SELECT COUNT(*) FROM item WHERE kode_barang = ?";
-            java.sql.PreparedStatement checkPst = conn.prepareStatement(checkSql);
-            checkPst.setString(1, kode);
-            java.sql.ResultSet rs = checkPst.executeQuery();
-            rs.next();
-            int count = rs.getInt(1);
-
-            java.sql.PreparedStatement pst;
-            if (count > 0) {
-                String sql = "UPDATE item SET nama_item=?, kategori=?, harga=?, stock_barang=? WHERE kode_barang=?";
-                pst = conn.prepareStatement(sql);
-                pst.setString(1, nama);
-                pst.setString(2, txt_kategori.getSelectedItem().toString());
-                pst.setInt(3, harga);
-                pst.setInt(4, stok);
-                pst.setString(5, kode);
-                pst.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Data Berhasil Diperbarui!");
-            } else {
-                String sql = "INSERT INTO item (nama_item, kategori, harga, stock_barang) VALUES (?,?,?,?)";
-                pst = conn.prepareStatement(sql);
-                pst.setString(1, nama);
-                pst.setString(2, txt_kategori.getSelectedItem().toString());
-                pst.setInt(3, harga);
-                pst.setInt(4, stok);
-                pst.execute();
-                JOptionPane.showMessageDialog(null, "Data Berhasil Disimpan!");
-            }
-
-            load_table();
-            reset_form();
-
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Harga dan Stok harus berupa angka!");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-        }
-    }//GEN-LAST:event_btnSimpanActionPerformed
-
-    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        reset_form();
-    }//GEN-LAST:event_btnResetActionPerformed
-
-    private void tableDataItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableDataItemMouseClicked
-        int baris = tableDataItem.getSelectedRow();
-
-        String kode_barang = tableDataItem.getValueAt(baris, 0).toString();
-        String nama = tableDataItem.getValueAt(baris, 1).toString();
-        String kategori = tableDataItem.getValueAt(baris, 2).toString();
-        String harga = tableDataItem.getValueAt(baris, 3).toString();
-        String stok = tableDataItem.getValueAt(baris, 4).toString();
-
-        txt_kodeBarang.setText(kode_barang);
-        txt_nama.setText(nama);
-        txt_kategori.setSelectedItem(kategori);
-        txt_harga.setText(harga);
-        txt_stok.setText(stok);
-    }//GEN-LAST:event_tableDataItemMouseClicked
-
     /**
      * @param args the command line arguments
      */
@@ -386,7 +364,6 @@ public class Data_Item extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -396,6 +373,5 @@ public class Data_Item extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> txt_kategori;
     private javax.swing.JTextField txt_kodeBarang;
     private javax.swing.JTextField txt_nama;
-    private javax.swing.JTextField txt_stok;
     // End of variables declaration//GEN-END:variables
 }
