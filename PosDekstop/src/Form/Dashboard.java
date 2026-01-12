@@ -364,11 +364,9 @@ public class Dashboard extends javax.swing.JFrame {
         model.addColumn("Menu");
         model.addColumn("Kategori");
         model.addColumn("Harga");
-        model.addColumn("Stok");
 
         try {
-            int no = 1;
-            String sql = "SELECT nama_item, kategori, harga, stock_barang FROM item";
+            String sql = "SELECT nama_item, kategori, harga FROM item";
             java.sql.Connection conn = Conn.configDB();
             java.sql.Statement stm = conn.createStatement();
             java.sql.ResultSet res = stm.executeQuery(sql);
@@ -377,8 +375,7 @@ public class Dashboard extends javax.swing.JFrame {
                 model.addRow(new Object[]{
                     res.getString("nama_item"),
                     res.getString("kategori"),
-                    res.getString("harga"),
-                    res.getString("stock_barang")
+                    res.getString("harga")
                 });
             }
             tableDashboard.setModel(model);
