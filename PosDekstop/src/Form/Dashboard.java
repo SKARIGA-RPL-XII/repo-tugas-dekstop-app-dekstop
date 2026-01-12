@@ -97,7 +97,7 @@ public class Dashboard extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "No", "Nama", "Menu", "Harga"
+                "Kode Barang", "Nama", "Kategori", "Harga"
             }
         ));
         jScrollPane1.setViewportView(tableDashboard);
