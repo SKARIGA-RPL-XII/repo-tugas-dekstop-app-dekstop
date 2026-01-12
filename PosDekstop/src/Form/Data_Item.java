@@ -36,6 +36,7 @@ public class Data_Item extends javax.swing.JFrame {
         model.addColumn("Kategori");
         model.addColumn("Harga");
 
+        
         try {
             java.sql.Connection conn = Conn.configDB();
             java.sql.Statement stm = conn.createStatement();
