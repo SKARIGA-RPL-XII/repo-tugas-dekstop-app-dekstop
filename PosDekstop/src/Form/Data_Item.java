@@ -46,7 +46,7 @@ public class Data_Item extends javax.swing.JFrame {
                     no++, res.getString(2), res.getString(3), res.getString(4)
                 });
             }
-            jTable1.setModel(model);
+            tableDataItem.setModel(model);
         } catch (Exception e) {
             System.err.println("Gagal Load Tabel: " + e.getMessage());
         }
@@ -75,7 +75,7 @@ public class Data_Item extends javax.swing.JFrame {
         btnReset = new javax.swing.JButton();
         btnSimpan = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableDataItem = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -155,7 +155,7 @@ public class Data_Item extends javax.swing.JFrame {
                 .addContainerGap(10, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableDataItem.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -166,7 +166,7 @@ public class Data_Item extends javax.swing.JFrame {
                 "No", "Nama Item", "Kategori", "Harga"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tableDataItem);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -216,15 +216,15 @@ public class Data_Item extends javax.swing.JFrame {
     }
     
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
-        int baris = jTable1.getSelectedRow();
+        int baris = tableDataItem.getSelectedRow();
 
         if (baris == -1) {
             JOptionPane.showMessageDialog(this, "Pilih data di tabel terlebih dahulu!");
             return;
         }
 
-        String id_item = jTable1.getValueAt(baris, 0).toString();
-        String nama_item = jTable1.getValueAt(baris, 1).toString();
+        String id_item = tableDataItem.getValueAt(baris, 0).toString();
+        String nama_item = tableDataItem.getValueAt(baris, 1).toString();
 
         int jawab = JOptionPane.showConfirmDialog(null, "Hapus item " + nama_item + "?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
 
@@ -319,7 +319,7 @@ public class Data_Item extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tableDataItem;
     private javax.swing.JTextField txt_harga;
     private javax.swing.JComboBox<String> txt_kategori;
     private javax.swing.JTextField txt_nama;
