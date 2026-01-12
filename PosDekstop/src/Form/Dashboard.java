@@ -5,6 +5,7 @@
 package Form;
 
 import Config.Conn;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -40,6 +41,7 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableDashboard = new javax.swing.JTable();
+        btnRefresh = new javax.swing.JToggleButton();
         transaksi = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jTextField2 = new javax.swing.JTextField();
@@ -97,10 +99,13 @@ public class Dashboard extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "No", "Nama", "Menu", "Harga"
+                "Kode Barang", "Nama", "Kategori", "Harga"
             }
         ));
         jScrollPane1.setViewportView(tableDashboard);
+
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(this::btnRefreshActionPerformed);
 
         javax.swing.GroupLayout itemLayout = new javax.swing.GroupLayout(item);
         item.setLayout(itemLayout);
@@ -108,12 +113,15 @@ public class Dashboard extends javax.swing.JFrame {
             itemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(itemLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(itemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
+                .addGroup(itemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
                     .addGroup(itemLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1)))
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRefresh)
+                        .addGap(6, 6, 6)))
                 .addContainerGap())
         );
         itemLayout.setVerticalGroup(
@@ -122,7 +130,8 @@ public class Dashboard extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(itemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(btnRefresh))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1)
                 .addContainerGap())
@@ -343,14 +352,15 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void load_table() {
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("No");
+        model.addColumn("Kode Barang");
         model.addColumn("Menu");
         model.addColumn("Kategori");
         model.addColumn("Harga");
+        model.addColumn("Stok");
 
         try {
             int no = 1;
-            String sql = "SELECT nama_item, kategori, harga FROM item";
+            String sql = "SELECT nama_item, kategori, harga, stock_barang FROM item";
             java.sql.Connection conn = Conn.configDB();
             java.sql.Statement stm = conn.createStatement();
             java.sql.ResultSet res = stm.executeQuery(sql);
@@ -360,7 +370,8 @@ public class Dashboard extends javax.swing.JFrame {
                     no++,
                     res.getString("nama_item"),
                     res.getString("kategori"),
-                    res.getString("harga")
+                    res.getString("harga"),
+                    res.getString("stock_barang")
                 });
             }
             tableDashboard.setModel(model);
@@ -384,6 +395,11 @@ public class Dashboard extends javax.swing.JFrame {
         Data_Item tambah = new Data_Item();
         tambah.setVisible(true);
     }//GEN-LAST:event_tambahItemActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        load_table();
+        JOptionPane.showMessageDialog(null, "Data berhasil diperbarui!");
+    }//GEN-LAST:event_btnRefreshActionPerformed
 
     /**
      * @param args the command line arguments
@@ -413,6 +429,7 @@ public class Dashboard extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Background;
     private javax.swing.JPanel Header;
+    private javax.swing.JToggleButton btnRefresh;
     private javax.swing.JPanel item;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
