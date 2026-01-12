@@ -37,13 +37,12 @@ public class Data_Item extends javax.swing.JFrame {
         model.addColumn("Harga");
 
         try {
-            int no = 1;
             java.sql.Connection conn = Conn.configDB();
             java.sql.Statement stm = conn.createStatement();
             java.sql.ResultSet res = stm.executeQuery("SELECT * FROM item");
             while (res.next()) {
                 model.addRow(new Object[]{
-                    no++, res.getString(2), res.getString(3), res.getString(4)
+                    res.getString(1), res.getString(2), res.getString(3), res.getString(4)
                 });
             }
             tableDataItem.setModel(model);
@@ -163,7 +162,7 @@ public class Data_Item extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "No", "Nama Item", "Kategori", "Harga"
+                "Kode Barang", "Menu", "Kategori", "Harga"
             }
         ));
         jScrollPane1.setViewportView(tableDataItem);
@@ -214,7 +213,7 @@ public class Data_Item extends javax.swing.JFrame {
         txt_kategori.setSelectedIndex(0);
         txt_nama.requestFocus();
     }
-    
+
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         int baris = tableDataItem.getSelectedRow();
 
@@ -231,18 +230,23 @@ public class Data_Item extends javax.swing.JFrame {
         if (jawab == JOptionPane.YES_OPTION) {
             try {
                 java.sql.Connection conn = Conn.configDB();
-                String sql = "DELETE FROM item WHERE No = ?";
+                String sql = "DELETE FROM item WHERE kode_barang = ?";
                 java.sql.PreparedStatement pst = conn.prepareStatement(sql);
                 pst.setString(1, id_item);
 
-                pst.execute();
+                int rowsDeleted = pst.executeUpdate();
 
-                JOptionPane.showMessageDialog(null, "Data berhasil dihapus");
-                load_table();
-                reset_form();
+                if (rowsDeleted > 0) {
+                    JOptionPane.showMessageDialog(null, "Data berhasil dihapus");
+                    load_table();
+                    reset_form();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Gagal: Kode barang '" + id_item + "' tidak ditemukan di database.");
+                }
 
+                pst.close();
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Gagal menghapus: " + e.getMessage());
+                JOptionPane.showMessageDialog(this, "Error sistem: " + e.getMessage());
             }
         }
     }//GEN-LAST:event_btnHapusActionPerformed
