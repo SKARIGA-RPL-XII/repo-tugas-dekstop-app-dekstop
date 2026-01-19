@@ -49,7 +49,7 @@ public class Dashboard extends javax.swing.JFrame {
         jTextField3 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jTextField8 = new javax.swing.JTextField();
+        jSpinner1 = new javax.swing.JSpinner();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -57,11 +57,11 @@ public class Dashboard extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        txtTotalbayar = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        txtCash = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        txtKembalian = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -110,6 +110,11 @@ public class Dashboard extends javax.swing.JFrame {
                 "Nama", "Kategori", "Harga"
             }
         ));
+        tableDashboard.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableDashboardMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableDashboard);
 
         btnRefresh.setText("Refresh");
@@ -156,6 +161,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         transaksi.setBackground(new java.awt.Color(255, 255, 255));
 
+        jTextField2.setToolTipText("");
         jTextField2.addActionListener(this::jTextField2ActionPerformed);
 
         jTextField3.addActionListener(this::jTextField3ActionPerformed);
@@ -168,6 +174,7 @@ public class Dashboard extends javax.swing.JFrame {
         jButton2.setBackground(new java.awt.Color(255, 51, 51));
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Reset");
+        jButton2.addActionListener(this::jButton2ActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -177,14 +184,14 @@ public class Dashboard extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jTextField2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,19 +202,16 @@ public class Dashboard extends javax.swing.JFrame {
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1)
                     .addComponent(jButton2)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
-                "No. Faktur", "Tanggal", "Nama", "Quantity", "Harga", "Jumlah"
+                "Nama", "Quantity", "Harga", "Jumlah"
             }
         ));
         jScrollPane2.setViewportView(jTable2);
@@ -215,10 +219,12 @@ public class Dashboard extends javax.swing.JFrame {
         jButton4.setBackground(new java.awt.Color(255, 153, 0));
         jButton4.setForeground(new java.awt.Color(255, 255, 255));
         jButton4.setText("Hapus Semua");
+        jButton4.addActionListener(this::jButton4ActionPerformed);
 
         jButton5.setBackground(new java.awt.Color(255, 51, 51));
         jButton5.setForeground(new java.awt.Color(255, 255, 255));
         jButton5.setText("Hapus");
+        jButton5.addActionListener(this::jButton5ActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -252,13 +258,19 @@ public class Dashboard extends javax.swing.JFrame {
 
         jLabel3.setText("Cash");
 
-        jTextField5.addActionListener(this::jTextField5ActionPerformed);
+        txtCash.addActionListener(this::txtCashActionPerformed);
+        txtCash.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCashKeyReleased(evt);
+            }
+        });
 
         jLabel4.setText("Kembali");
 
         jButton6.setBackground(new java.awt.Color(0, 102, 0));
         jButton6.setForeground(new java.awt.Color(255, 255, 255));
         jButton6.setText("Bayar");
+        jButton6.addActionListener(this::jButton6ActionPerformed);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -267,9 +279,9 @@ public class Dashboard extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField4)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                    .addComponent(txtTotalbayar)
+                    .addComponent(txtCash, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                    .addComponent(txtKembalian, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -288,15 +300,15 @@ public class Dashboard extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtTotalbayar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtCash, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtKembalian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton6)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -389,17 +401,77 @@ public class Dashboard extends javax.swing.JFrame {
             System.err.println("Gagal Load Dashboard: " + e.getMessage());
         }
     }
+    private void hitungTotal() {
+        int total = 0;
+
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            total += Integer.parseInt(model.getValueAt(i, 3).toString()); // kolom Jumlah
+        }
+        txtTotalbayar.setText(String.valueOf(total));
+    }
+
+    
+    private void resetInput() {
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jSpinner1.setValue(1);
+    }
+    
+    private void hitungKembalian() {
+        try {
+            int total = Integer.parseInt(txtTotalbayar.getText()); // ✅ total bayar
+            int cash  = 0;
+
+            if (!txtCash.getText().isEmpty()) {
+                cash = Integer.parseInt(txtCash.getText());
+            }
+            int kembalian = cash - total;
+
+            if (kembalian < 0) {
+                txtKembalian.setText("0");
+            } else {
+                txtKembalian.setText(String.valueOf(kembalian));
+            }
+        } catch (Exception e) {
+            txtKembalian.setText("0");
+        }
+    }
+
+
+    
+    private String currentNoFaktur = null;
+
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        if (jTextField2.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Pilih menu terlebih dahulu!");
+        return;
+    }
+
+    String menu = jTextField2.getText();
+    int qty = (int) jSpinner1.getValue();
+    int harga = Integer.parseInt(jTextField3.getText());
+    int jumlah = harga * qty;
+
+    DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+    model.addRow(new Object[]{
+        menu,
+        qty,
+        harga,
+        jumlah
+    });
+
+    hitungTotal();
+    resetInput();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+    private void txtCashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCashActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+    }//GEN-LAST:event_txtCashActionPerformed
 
     private void tambahItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tambahItemActionPerformed
         Data_Item tambah = new Data_Item();
@@ -440,6 +512,150 @@ public class Dashboard extends javax.swing.JFrame {
             System.out.println("Error Pencarian: " + e.getMessage());
         }
     }//GEN-LAST:event_txtSearchKeyReleased
+
+    private void tableDashboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableDashboardMouseClicked
+         int row = tableDashboard.getSelectedRow();
+
+        if (row != -1) {
+            jTextField2.setText(tableDashboard.getValueAt(row, 0).toString()); // Menu
+            jTextField3.setText(tableDashboard.getValueAt(row, 2).toString()); // Harga
+            jSpinner1.setValue(1); // Qty default
+        }
+    }//GEN-LAST:event_tableDashboardMouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        resetInput();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        int row = jTable2.getSelectedRow();
+
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih data yang mau dihapus!");
+            return;
+        }
+
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        model.removeRow(row);
+
+        hitungTotal();
+        hitungKembalian();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+
+        if (model.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Keranjang sudah kosong!");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Hapus semua item?",
+            "Konfirmasi",
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            model.setRowCount(0);
+
+            txtTotalbayar.setText("0");
+            txtCash.setText("");
+            txtKembalian.setText("0");
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void txtCashKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCashKeyReleased
+        hitungKembalian();
+    }//GEN-LAST:event_txtCashKeyReleased
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        if (txtTotalbayar.getText().isEmpty() || txtCash.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Total atau Cash masih kosong!");
+        return;
+    }
+
+    if (jTable2.getRowCount() == 0) {
+        JOptionPane.showMessageDialog(this, "Belum ada item yang dibeli!");
+        return;
+    }
+
+    try {
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+
+        // 2️⃣ Generate 1 NO FAKTUR
+        String noFaktur = "TRX-" + System.currentTimeMillis();
+        java.sql.Timestamp tanggal = new java.sql.Timestamp(System.currentTimeMillis());
+
+        int total = Integer.parseInt(txtTotalbayar.getText());
+        int cash  = Integer.parseInt(txtCash.getText());
+        int kembalian = Integer.parseInt(txtKembalian.getText());
+
+        String sql = "INSERT INTO transaksi "
+                   + "(no_faktur, tanggal, nama_item, quantity, harga, jumlah, total_bayar, cash, kembalian) "
+                   + "VALUES (?,?,?,?,?,?,?,?,?)";
+
+        java.sql.Connection conn = Conn.configDB();
+        java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+
+        // 3️⃣ Simpan semua item dg NO FAKTUR YANG SAMA
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String namaItem = model.getValueAt(i, 0).toString();
+            int qty         = Integer.parseInt(model.getValueAt(i, 1).toString());
+            int harga       = Integer.parseInt(model.getValueAt(i, 2).toString());
+            int jumlah      = Integer.parseInt(model.getValueAt(i, 3).toString());
+
+            pst.setString(1, noFaktur);
+            pst.setTimestamp(2, tanggal);
+            pst.setString(3, namaItem);
+            pst.setInt(4, qty);
+            pst.setInt(5, harga);
+            pst.setInt(6, jumlah);
+            pst.setInt(7, total);
+            pst.setInt(8, cash);
+            pst.setInt(9, kembalian);
+
+            pst.executeUpdate();
+        }
+
+        // 4️⃣ Tampilkan struk popup
+        StringBuilder struk = new StringBuilder();
+        struk.append("=========== STRUK PEMBAYARAN ==========\n");
+        struk.append("No Faktur : ").append(noFaktur).append("\n");
+        struk.append("Tanggal   : ").append(tanggal).append("\n");
+        struk.append("--------------------------------------\n");
+        struk.append(String.format("%-15s %5s %8s %10s\n", "Item", "Qty", "Harga", "Jumlah"));
+        struk.append("--------------------------------------\n");
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String namaItem = model.getValueAt(i, 0).toString();
+            String qty      = model.getValueAt(i, 1).toString();
+            String harga    = model.getValueAt(i, 2).toString();
+            String jumlah   = model.getValueAt(i, 3).toString();
+
+            struk.append(String.format("%-15s %5s %8s %10s\n",
+                    namaItem, qty, harga, jumlah));
+        }
+
+        struk.append("--------------------------------------\n");
+        struk.append("Total     : ").append(total).append("\n");
+        struk.append("Cash      : ").append(cash).append("\n");
+        struk.append("Kembalian : ").append(kembalian).append("\n");
+        struk.append("======================================\n");
+
+        JOptionPane.showMessageDialog(this, struk.toString(), "Struk", JOptionPane.INFORMATION_MESSAGE);
+
+        // 5️⃣ Reset setelah bayar
+        model.setRowCount(0);
+        txtTotalbayar.setText("");
+        txtCash.setText("");
+        txtKembalian.setText("");
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Gagal bayar: " + e.getMessage());
+    }
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -486,16 +702,16 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField8;
     private javax.swing.JTable tableDashboard;
     private javax.swing.JButton tambahItem;
     private javax.swing.JPanel transaksi;
+    private javax.swing.JTextField txtCash;
+    private javax.swing.JTextField txtKembalian;
     private javax.swing.JTextField txtSearch;
+    private javax.swing.JTextField txtTotalbayar;
     // End of variables declaration//GEN-END:variables
 }
